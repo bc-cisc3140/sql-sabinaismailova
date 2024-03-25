@@ -1,0 +1,6 @@
+
+Some ways to merge CSV files into one:
+
+`cat file1.csv <(tail +2 file2.csv) <(tail +2 file3.csv) > bigfile.csv`
+
+`awk '(NR == 1) || (FNR > 1)' file*.csv > bigfile.csv`
