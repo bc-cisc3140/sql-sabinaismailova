@@ -27,10 +27,23 @@ app.get("/", (req, res, next) => {
     //res.json({"message":"Ok"})
 });
 
+// List all records in top100 table
+app.get("/all", (req, res, next) => {
+  console.log("/all");
+  const sql = "SELECT rowid as rank, * FROM top100";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(400).json({"error":err.message});
+      return console.error(err.message);
+    }
+    res.status(200).json({rows});
+  })
+});
+
+// List song at specified ranking
 app.get("/rank/:id", (req, res) => {
   // Access id via: req.params.id
   const sql = `SELECT rowid as rank, * FROM top100 where rowid = ${req.params.id};`;
-  console.log(sql);
   db.all(sql, [], (err, row) => {
     if (err) {
       res.status(400).json({"error":err.message});
@@ -53,22 +66,10 @@ app.get("/artist/:artist", (req, res) => {
   })
 });
 
-app.get("/all", (req, res, next) => {
-  console.log("/all");
-  const sql = "SELECT rowid as rank, * FROM top100";
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(400).json({"error":err.message});
-      return console.error(err.message);
-    }
-    res.status(200).json({rows});
-  })
-});
 
-
-app.get("/create", (req, res, next) => {
+app.post("/create", (req, res, next) => {
   console.log("/create");
-  const sql = `CREATE TABLE IF NOT EXISTS ${req.query.table}(Artist TEXT, Song TEXT);`;
+  const sql = `CREATE TABLE IF NOT EXISTS ${req.query.table}(Artist TEXT, Song TEXT, another INT);`;
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({"error":err.message});
