@@ -2,9 +2,9 @@ const sqlite3 = require('sqlite3').verbose();
 const express = require("express");
 const app = express();
 const router = express.Router();
+app.use(express.json());
 
 const port = 3000;
-//app.use(express.json());
 
 // Start server
 app.listen(port, () => {
@@ -21,6 +21,21 @@ let db = new sqlite3.Database('./billboard.db', sqlite3.OPEN_READWRITE, (err) =>
 
 
 // Insert here other API endpoints
+/*
+GET Requests
+/
+/all
+/rank/:id
+/artist/:name
+/update
+/create
+/tables
+/table/:tableid
+
+POST Requests
+/song
+
+*/
 // Root endpoint
 app.get("/", (req, res, next) => {
   res.send("API end points include /all, /:id, /:artist");
@@ -51,6 +66,22 @@ app.get("/rank/:id", (req, res) => {
     }
     res.status(200).json({row});
   })
+});
+
+app.post("/song", (req, res) => {
+  let artist = req.body.artist;
+  let song = req.body.song;
+  let date = new Date().toLocaleDateString();
+  const sql = `INSERT INTO top100 VALUES ('${artist}', '${song}', '${date}');`;
+  db.all(sql, [], (err, row) => {
+    if (err) {
+      res.status(400).json({"error":err.message});
+      return console.error(err.message);
+    }
+    console.log("completed request.", sql);
+    res.status(200).json(req.body);
+  })
+
 });
 
 app.get("/artist/:artist", (req, res) => {

@@ -13,6 +13,7 @@ Run `make` to start the server locally. You must have the `billboard.db` databas
 Some exercises to try include: 
 
 * [ ] add API endpoint(s) for inserting new data
+  * [x] add `/song` endpoint for inserting new record to table `top100`
 * [ ] add more API endpoints for updating table structure 
 * [ ] allow case insensitive searching
 * [ ] enable searching a range (i.e. top 10; top 20)
